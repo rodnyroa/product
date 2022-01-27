@@ -114,5 +114,22 @@ public class ProductServiceTest extends ProductUtil {
 
     }
 
+    @DisplayName("add successful")
+    @Test
+    void add() {
+        ProductDto request = this.getProductDtoMock();
+
+        Mockito.when(this.mapper.dtoToEntity(Mockito.any(ProductDto.class))).thenReturn(this.getProductMock());
+        Mockito.when(this.repository.save(Mockito.any(Product.class))).thenReturn(this.getProductMock());
+
+        Integer productId = this.service.add(request);
+
+        Assertions.assertNotNull(productId);
+
+        this.inOrder.verify(this.mapper).dtoToEntity(Mockito.any(ProductDto.class));
+        this.inOrder.verify(this.repository).save(Mockito.any(Product.class));
+        this.inOrder.verifyNoMoreInteractions();
+    }
+
 
 }

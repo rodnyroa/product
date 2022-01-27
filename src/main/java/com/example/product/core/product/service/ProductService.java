@@ -11,4 +11,6 @@ public interface ProductService {
     ProductDto findById(Integer productId);
 
     void update(Integer productId, ProductDto productDto);
+
+    Integer add(ProductDto productDto);
 }

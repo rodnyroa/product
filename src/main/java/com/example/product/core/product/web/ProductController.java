@@ -16,8 +16,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
+import java.net.URI;
 
 @RestController
 @RequestMapping(value = "/v1/products")
@@ -76,5 +78,23 @@ public class ProductController extends BaseControllerException {
             @Valid @RequestBody ProductDto request) {
         service.update(productId, request);
         return ResponseEntity.noContent().build();
+    }
+
+    @Operation(summary = "Create a product")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Product created",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ProductDto.class))}),
+            @ApiResponse(responseCode = "400", description = "Invalid request",
+                    content = @Content)
+    })
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<Void> add(
+            @Valid @RequestBody ProductDto request) {
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(service.add(request)).toUri();
+
+        return ResponseEntity.created(location).build();
     }
 }

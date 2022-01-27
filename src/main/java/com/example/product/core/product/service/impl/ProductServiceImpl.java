@@ -54,8 +54,20 @@ public class ProductServiceImpl implements ProductService {
         Product productUpdated = this.mapper.dtoToEntity(productDto);
         productUpdated.setId(product.getId());
 
-        this.repository.save(productUpdated);
+        this.save(productUpdated);
 
+    }
+
+    @Override
+    public Integer add(ProductDto productDto) {
+
+        Product product = this.mapper.dtoToEntity(productDto);
+        product.setId(null);
+        return this.save(product).getId();
+    }
+
+    private Product save(Product product) {
+        return this.repository.save(product);
     }
 
     private Product findProductById(Integer productId) {
