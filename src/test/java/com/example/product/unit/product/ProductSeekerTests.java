@@ -32,16 +32,16 @@ public class ProductSeekerTests extends ProductUtil {
 
     @BeforeEach
     void setup() {
-        this.seeker = new ProductSeekerImpl(repository);
+        this.seeker = new ProductSeekerImpl(this.repository);
     }
 
     @DisplayName("findById returns value")
     @Test
     void findById() {
-        Product mock = getProductMock();
-        Mockito.when(repository.findById(Mockito.anyInt()))
+        Product mock = this.getProductMock();
+        Mockito.when(this.repository.findById(Mockito.anyInt()))
                 .thenReturn(Optional.of(mock));
-        Product product = seeker.findById(ID);
+        Product product = this.seeker.findById(ID);
         Assertions.assertNotNull(product);
 
     }
@@ -49,19 +49,19 @@ public class ProductSeekerTests extends ProductUtil {
     @DisplayName("when findById with invalid id should throw NotFoundException")
     @Test
     void findByIdShouldThrowException() {
-        Mockito.when(repository.findById(Mockito.anyInt()))
+        Mockito.when(this.repository.findById(Mockito.anyInt()))
                 .thenReturn(Optional.empty());
-        Assertions.assertThrows(NotFoundException.class, () -> seeker.findById(ID));
+        Assertions.assertThrows(NotFoundException.class, () -> this.seeker.findById(ID));
     }
 
     @DisplayName("when call findAll then return items")
     @Test
-    void findAllWi() {
+    void findAll() {
 
         Page<Product> mock = new PageImpl<>(Arrays.asList(this.getProductMock()));
-        Mockito.when(repository.findAll(Mockito.any(PageRequest.class)))
+        Mockito.when(this.repository.findAll(Mockito.any(PageRequest.class)))
                 .thenReturn(mock);
-        Page<Product> page = seeker.findAll(PageRequest.of(1, 10));
+        Page<Product> page = this.seeker.findAll(PageRequest.of(1, 10));
         Assertions.assertNotNull(page);
         Assertions.assertEquals(mock, page);
     }
@@ -70,7 +70,7 @@ public class ProductSeekerTests extends ProductUtil {
     @Test
     void findAll01() {
         Page<Product> mock = new PageImpl<>(Collections.emptyList());
-        Mockito.when(repository.findAll(Mockito.any(PageRequest.class)))
+        Mockito.when(this.repository.findAll(Mockito.any(PageRequest.class)))
                 .thenReturn(mock);
 
         Page<Product> page = this.seeker.findAll(PageRequest.of(1, 10));

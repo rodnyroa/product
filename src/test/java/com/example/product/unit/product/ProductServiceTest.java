@@ -46,9 +46,9 @@ public class ProductServiceTest extends ProductUtil {
     }
 
 
-    @DisplayName("find all products")
+    @DisplayName("get products")
     @Test
-    void getCampaignWithElements() {
+    void getProducts() {
 
         Page<Product> mock = new PageImpl<>(Arrays.asList(this.getProductMock()));
 

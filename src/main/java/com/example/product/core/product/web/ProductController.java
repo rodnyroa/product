@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping(value = "/products")
+@RequestMapping(value = "/v1/products")
 public class ProductController extends BaseControllerException {
 
     private ProductService service;
@@ -30,15 +30,12 @@ public class ProductController extends BaseControllerException {
         this.service = service;
     }
 
-    @Operation(summary = "Get all books")
+    @Operation(summary = "Get products")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Found products",
+            @ApiResponse(responseCode = "200", description = "Products list",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = ProductDto.class))}),
-            @ApiResponse(responseCode = "400", description = "Invalid id supplied",
-                    content = @Content),
-            @ApiResponse(responseCode = "404", description = "Products not found",
-                    content = @Content)})
+    })
     @GetMapping
     public ResponseEntity<Page<ProductDto>> findAll(Pageable pageable) {
         HttpHeaders headers = new HttpHeaders();
@@ -47,13 +44,17 @@ public class ProductController extends BaseControllerException {
 
     @Operation(summary = "Get a product by its id")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Found products",
-                    content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = ProductDto.class))}),
-            @ApiResponse(responseCode = "400", description = "Invalid id supplied",
-                    content = @Content),
-            @ApiResponse(responseCode = "404", description = "Product not found",
-                    content = @Content)})
+            @ApiResponse(
+                    responseCode = "200", description = "Found products",
+                    content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = ProductDto.class))
+                    }
+            ),
+            @ApiResponse(
+                    responseCode = "404", description = "Product not found",
+                    content = @Content)
+    }
+    )
     @GetMapping("/{product-id}")
     public ResponseEntity<ProductDto> findById(@PathVariable("product-id") Integer productId) {
         HttpHeaders headers = new HttpHeaders();
@@ -62,7 +63,9 @@ public class ProductController extends BaseControllerException {
 
     @Operation(summary = "Update a product by its id")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "204", description = "product updated"),
+            @ApiResponse(responseCode = "200", description = "Found products",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ProductDto.class))}),
             @ApiResponse(responseCode = "400", description = "Invalid id supplied",
                     content = @Content),
             @ApiResponse(responseCode = "404", description = "Product not found",
