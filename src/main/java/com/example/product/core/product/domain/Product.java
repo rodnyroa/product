@@ -1,5 +1,6 @@
 package com.example.product.core.product.domain;
 
+import com.example.product.core.order.domain.Order;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -9,6 +10,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.List;
 
 @Entity
 @EqualsAndHashCode(callSuper = false)
@@ -31,4 +33,6 @@ public class Product implements Serializable {
     @NotNull
     private BigDecimal price;
 
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Order> order;
 }

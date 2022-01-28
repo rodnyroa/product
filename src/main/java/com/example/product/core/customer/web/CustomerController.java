@@ -1,5 +1,6 @@
 package com.example.product.core.customer.web;
 
+import com.example.product.config.controller.BaseControllerException;
 import com.example.product.core.customer.dto.CustomerDto;
 import com.example.product.core.customer.service.CustomerService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -18,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value = "/v1/customers")
-public class CustomerController {
+public class CustomerController extends BaseControllerException {
 
     private CustomerService service;
 

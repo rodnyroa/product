@@ -1,5 +1,6 @@
 package com.example.product.core.customer.domain;
 
+import com.example.product.core.order.domain.Order;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -7,6 +8,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @EqualsAndHashCode(callSuper = false)
@@ -34,4 +36,7 @@ public class Customer implements Serializable {
     @Size(max = 100)
     @NotBlank
     private String email;
+
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Order> order;
 }
