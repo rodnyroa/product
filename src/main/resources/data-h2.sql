@@ -1,15 +1,3 @@
-/*INSERT INTO public.customer_dim(id, firstname, lastname, email) VALUES
-(1, 'Gema', 'Zambrano', 'gema.zambrano@yahoo.com')
-(2, 'Marcos', 'Castro', 'marcos.castro@gmail.com'),
-(3, 'Pepe', 'Moreno', 'pepe.moreno@hotmail.com'),
-(4, 'Maria', 'Moreno', 'maria.moreno@hotmail.com'),
-(5, 'Juan', 'Fernandez', 'juan.fernandez@hotmail.com');
-(6, 'Carla', 'Lopez', 'carla.lopez@yahoo.com'),
-(7, 'Marcos', 'Diaz', 'marcos.diaz@gmail.com'),
-(8, 'Maria', 'Ruiz', 'maria.ruiz@yahoo.com'),
-(9, 'Carla', 'Gomez', 'carla.gomez@yahoo.com'),
-(10, 'Juan', 'Pineda', 'juan.pineda@hotmail.com');*/
-
 INSERT INTO public.customer_dim(firstname, lastname, email) VALUES
   ('Gema', 'Zambrano', 'gema.zambrano@yahoo.com'),
   ('Marcos', 'Castro', 'marcos.castro@gmail.com'),
@@ -125,3 +113,18 @@ INSERT INTO public.product_dim(name, price) VALUES
   ('Product 98', 15.26),
   ('Product 99', 21.74),
   ('Product 100', 27.33);
+
+
+INSERT INTO public.order_fact(customer_id, product_id, order_time, order_number, order_line_number, order_line_quantity, total_price_line) VALUES
+(1,1,now(),'253dd095-57bf-45bd-92bf-fa005b03d1dd',1,1,19.53),
+--
+(1,20,now(),'62d883ad-e5c8-466f-a35e-a2f6b65d8961',1,1,36.34),
+--
+(9,100,'2020-01-02','3ac0a7bf-1985-42c0-bf4e-503d6754e515',1,2,54.66),
+(9,6,'2020-01-02','3ac0a7bf-1985-42c0-bf4e-503d6754e515',2,1,29.25),
+(9,9,'2020-01-02','3ac0a7bf-1985-42c0-bf4e-503d6754e515',3,1,29),
+--
+(5,88,'2020-01-15','ce6ccd6e-2187-46b6-b958-d62fcac297a6',2,4,142.56),
+(5,5,'2020-01-15','ce6ccd6e-2187-46b6-b958-d62fcac297a6',1,3,90.99),
+(5,10,'2020-01-15','ce6ccd6e-2187-46b6-b958-d62fcac297a6',3,2,67.32),
+(5,1,'2020-01-15','ce6ccd6e-2187-46b6-b958-d62fcac297a6',4,1,15.25);

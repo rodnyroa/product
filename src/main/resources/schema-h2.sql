@@ -36,10 +36,14 @@ create table public.order_fact
 	product_id bigint not null
 		constraint fk_order_fact_02
 			references product_dim,
-	order_time timestamp not null,
+	order_time date not null,
 	order_number varchar(50) not null,
 	order_line_number integer not null,
 	order_line_quantity smallint not null,
 	total_price_line numeric not null
 )
 ;
+
+
+alter sequence product_dim_seq restart with 101;
+alter sequence customer_dim_seq restart with 11;
