@@ -1,0 +1,95 @@
+pipeline {
+    agent any
+    environment {
+        DISABLE_AUTH = 'true'
+        DB_ENGINE    = 'sqlite'
+    }
+    stages {
+    	stage('Preparation') { // for display purposes
+    		steps {
+    			git 'https://github.com/rodnyroa/product.git'
+    		}
+		}
+        stage('Compile') {
+        	steps {
+        		sh "mvn clean compile"
+        	}
+		}
+		stage('Unit Test') {
+			steps {
+				sh "mvn -Pdev test"
+			}
+		}
+		stage('Integration Test') {
+			steps {
+				sh "mvn -Pdev failsafe:integration-test"
+			}
+		}
+        /*stage ("SonarQube Scan") {
+           steps {
+                script {
+                    def home = env["HOME"]
+                    def inptext = readFile file: "sonar-project.properties"
+                    inptext = inptext.replaceAll("HOME", home)
+                    writeFile file: "sonar-project.properties", text: inptext
+                }
+                withSonarQubeEnv('SonarQube6.7.4') {
+                    sh "/opt/sonar-scanner/bin/sonar-scanner -D sonar-project.properties"
+                }
+           }
+        }
+        stage ("Quality Gate") {
+           steps {
+              script {
+                    def qualitygate = waitForQualityGate()
+                    if (qualitygate.status != "OK") {
+                        error "Pipeline aborted due to quality gate coverage failure: ${qualitygate.status}"
+                    }
+                }
+           }
+        }*/
+		stage('Build Test') {
+			steps {
+				sh "mvn clean package -Ptest -Dmaven.test.skip=true"
+			}
+			//post {
+            //    always {
+            //        archiveArtifacts 'product/target/*.jar'
+            //    }
+            //}
+		}
+		stage('Deploy Test') {
+            steps {
+                echo "Deploying test env"
+            }
+        }
+        stage('Build Prod') {
+			steps {
+				sh "mvn clean package -Pprod -Dmaven.test.skip=true"
+			}
+		}
+        stage('Deploy Prod') {
+            steps {
+                echo "Deploying prod env"
+            }
+        }
+    }
+    post {
+        always {
+            echo 'One way or another, I have finished'
+            deleteDir() /* clean up our workspace */
+        }
+        success {
+            echo "success"
+        }
+        unstable {
+            echo "unstable"
+        }
+        failure {
+            echo "Ha fallado"
+        }
+        changed {
+            echo 'Things were different before...'
+        }
+    }
+}
