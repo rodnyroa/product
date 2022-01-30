@@ -81,7 +81,7 @@ public class OrderController extends BaseControllerException {
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = OrderResponseDto.class))}),
     })
-    @GetMapping
+    @GetMapping(value = "orders")
     public ResponseEntity<Page<OrderResponseDto>> findAllOrders(
             @RequestParam(name = "order-start-date", required = false)
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate orderStartDate,
