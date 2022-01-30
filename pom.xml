@@ -108,10 +108,45 @@
                 </resources>
             </build>
         </profile>
+        <profile>
+            <id>pro</id>
+            <properties>
+                <env>pro</env>
+                <persistence></persistence>
+            </properties>
+            <build>
+                <resources>
+                    <resource>
+                        <filtering>true</filtering>
+                        <directory>src/main/resources</directory>
+                        <excludes>
+                            <exclude>dev.properties</exclude>
+                            <exclude>prod.properties</exclude>
+                        </excludes>
+                    </resource>
+                </resources>
+                <plugins>
+                    <!-- Skip tests -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <version>${surefire.version}</version>
+                        <configuration>
+                            <skipTests>true</skipTests>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
     </profiles>
 
     <build>
+        <filters>
+            <filter>src/main/resources/${env}.properties</filter>
+        </filters>
         <plugins>
+
+            <!--Lombok-->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
@@ -157,6 +192,7 @@
                 </configuration>
             </plugin>
 
+            <!--Dockerizar-->
             <plugin>
                 <groupId>com.spotify</groupId>
                 <artifactId>dockerfile-maven-plugin</artifactId>
@@ -179,6 +215,7 @@
                 </configuration>
             </plugin>
 
+            <!--Cobertura-->
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
