@@ -1,5 +1,7 @@
 package com.example.product.core.order.service.impl;
 
+import com.example.product.core.customer.domain.Customer;
+import com.example.product.core.customer.service.CustomerSeeker;
 import com.example.product.core.order.domain.Order;
 import com.example.product.core.order.service.OrderSeeker;
 import com.example.product.core.order.service.OrderSeekerFacade;
@@ -18,11 +20,13 @@ public class OrderSeekerFacadeImpl implements OrderSeekerFacade {
 
     private OrderSeeker orderSeeker;
     private ProductSeeker productSeeker;
+    private CustomerSeeker customerSeeker;
 
     @Autowired
-    public OrderSeekerFacadeImpl(OrderSeeker orderSeeker, ProductSeeker productSeeker) {
+    public OrderSeekerFacadeImpl(OrderSeeker orderSeeker, ProductSeeker productSeeker, CustomerSeeker customerSeeker) {
         this.orderSeeker = orderSeeker;
         this.productSeeker = productSeeker;
+        this.customerSeeker = customerSeeker;
     }
 
     @Override
@@ -43,6 +47,11 @@ public class OrderSeekerFacadeImpl implements OrderSeekerFacade {
     @Override
     public Product findProductById(Integer productId) {
         return this.productSeeker.findById(productId);
+    }
+
+    @Override
+    public Customer findCustomerById(Integer customerId) {
+        return this.customerSeeker.findById(customerId);
     }
 
 }

@@ -58,6 +58,9 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public String addNewOrder(OrderRequestDto request) {
         List<Order> orders = new ArrayList<>();
+
+        this.checkCustomer(request.getCustomerId());
+
         String orderNumber = UUID.randomUUID().toString();
         AtomicInteger lineNumber = new AtomicInteger(1);
         request.getProducts()
@@ -122,5 +125,9 @@ public class OrderServiceImpl implements OrderService {
 
     private boolean hasOrderStartAndEndDate(LocalDate orderStartDate, LocalDate orderEndDate) {
         return Objects.isNull(orderStartDate) && Objects.isNull(orderEndDate);
+    }
+
+    private void checkCustomer(Integer customerId) {
+        this.seeker.findCustomerById(customerId);
     }
 }

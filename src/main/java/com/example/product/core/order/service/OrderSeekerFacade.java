@@ -1,5 +1,6 @@
 package com.example.product.core.order.service;
 
+import com.example.product.core.customer.domain.Customer;
 import com.example.product.core.order.domain.Order;
 import com.example.product.core.product.domain.Product;
 import org.springframework.data.domain.Page;
@@ -16,4 +17,6 @@ public interface OrderSeekerFacade {
     List<Order> findOrderById(String number);
 
     Product findProductById(Integer productId);
+
+    Customer findCustomerById(Integer customerId);
 }
