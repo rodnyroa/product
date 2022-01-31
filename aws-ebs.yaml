@@ -1,0 +1,84 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Resources:
+  sampleApplication:
+    Type: AWS::ElasticBeanstalk::Application
+    Properties:
+      Description: AWS Elastic Beanstalk Sample Application
+  sampleApplicationVersion:
+    Type: AWS::ElasticBeanstalk::ApplicationVersion
+    Properties:
+      ApplicationName:
+        ApplicationName: API product
+        Ref: sampleApplication
+      Description: AWS ElasticBeanstalk Sample Application Version
+      SourceBundle:
+        S3Bucket: !Sub "api-product-${AWS::Region}"
+        S3Key: product-0.0.1.jar
+  sampleConfigurationTemplate:
+    Type: AWS::ElasticBeanstalk::ConfigurationTemplate
+    Properties:
+      ApplicationName:
+        Ref: sampleApplication
+      Description: AWS ElasticBeanstalk Sample Configuration Template
+      OptionSettings:
+      - Namespace: aws:autoscaling:asg
+        OptionName: MinSize
+        Value: '2'
+      - Namespace: aws:autoscaling:asg
+        OptionName: MaxSize
+        Value: '6'
+      - Namespace: aws:elasticbeanstalk:environment
+        OptionName: EnvironmentType
+        Value: LoadBalanced
+      - Namespace: aws:autoscaling:launchconfiguration
+        OptionName: IamInstanceProfile
+        Value: !Ref MyInstanceProfile        
+      SolutionStackName: solution-stack
+  sampleEnvironment:
+    Type: AWS::ElasticBeanstalk::Environment
+    Properties:
+      ApplicationName:
+        Ref: sampleApplication
+      Description: AWS ElasticBeanstalk Sample Environment
+      TemplateName:
+        Ref: sampleConfigurationTemplate
+      VersionLabel:
+        Ref: sampleApplicationVersion
+  MyInstanceRole:
+    Type: AWS::IAM::Role
+    Properties: 
+      AssumeRolePolicyDocument:                   
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - ec2.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Description: Beanstalk EC2 role
+      ManagedPolicyArns: 
+        - arn:aws:iam::aws:policy/AWSElasticBeanstalkWebTier
+        - arn:aws:iam::aws:policy/AWSElasticBeanstalkMulticontainerDocker
+        - arn:aws:iam::aws:policy/AWSElasticBeanstalkWorkerTier
+  MyInstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties: 
+      Roles: 
+        - !Ref MyInstanceRole
+  SpringBootBeanstalkEnvironment:
+    Type: 'AWS::ElasticBeanstalk::Environment'
+    Properties:
+      ApplicationName: !Ref sampleApplication
+      EnvironmentName: API-product-Prod
+      TemplateName: !Ref sampleConfigurationTemplate
+      VersionLabel: !Ref SpringBootApplicationVersion
+      Tags:
+        - Key: Name
+          Value: !Sub EB-${EnvironmentName}        
+Outputs:
+  URL:
+    Description: Url service
+    Value: !Join ['', ['http://', !GetAtt SpringBootBeanstalkEnvironment.EndpointURL]]
+    Export:
+      Name: !Sub API-Product-Prod        
