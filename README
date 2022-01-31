@@ -1,10 +1,12 @@
-Steps to probe this API:
+Steps to test this API:
   1.- Clone this repository
   2.- mvn -Pdev clean package
   3.- docker run -e "SPRING_PROFILES_ACTIVE=dev" -p 8080:8080 -t product-api:0.0.1
   4.- go to: http://127.0.0.1:8080/swagger-ui/index.html
 
 
+Notes:
+  db.png is the data model, based on the "Kimbal methodology".
 
 
 
