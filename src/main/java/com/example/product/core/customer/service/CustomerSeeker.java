@@ -1,12 +1,32 @@
 package com.example.product.core.customer.service;
 
 import com.example.product.core.customer.domain.Customer;
+import com.example.product.core.customer.repository.CustomerRepository;
+import com.example.product.core.exception.NotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Component;
 
-public interface CustomerSeeker {
+@Component
+public class CustomerSeeker {
 
-    Page<Customer> findAll(Pageable pageable);
+  private CustomerRepository repository;
 
-    Customer findById(Integer customerId);
+  @Autowired
+  public CustomerSeeker(CustomerRepository repository) {
+    this.repository = repository;
+  }
+
+
+  public Page<Customer> findAll(Pageable pageable) {
+    return this.repository.findAll(pageable);
+  }
+
+
+  public Customer findById(Integer customerId) {
+    String msg = String.format("Invalid id: %s", customerId);
+    return this.repository.findById(customerId)
+        .orElseThrow(() -> new NotFoundException(msg));
+  }
 }
