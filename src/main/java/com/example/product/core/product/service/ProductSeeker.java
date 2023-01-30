@@ -9,24 +9,24 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ProductSeeker implements ProductSeeker {
+public class ProductSeeker {
 
-    private ProductRepository repository;
+  private ProductRepository repository;
 
-    @Autowired
-    public ProductSeeker(ProductRepository repository) {
-        this.repository = repository;
-    }
+  @Autowired
+  public ProductSeeker(ProductRepository repository) {
+    this.repository = repository;
+  }
 
-    @Override
-    public Page<Product> findAll(Pageable pageable) {
-        return this.repository.findAll(pageable);
-    }
 
-    @Override
-    public Product findById(Integer productId) {
-        String msg = String.format("Invalid id: %s", productId);
-        return this.repository.findById(productId)
-                .orElseThrow(() -> new NotFoundException(msg));
-    }
+  public Page<Product> findAll(Pageable pageable) {
+    return this.repository.findAll(pageable);
+  }
+
+
+  public Product findById(Integer productId) {
+    String msg = String.format("Invalid id: %s", productId);
+    return this.repository.findById(productId)
+        .orElseThrow(() -> new NotFoundException(msg));
+  }
 }
